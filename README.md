@@ -1,4 +1,4 @@
-# teamup
+# FREEMUSIC
 
 A new Flutter project.
 
