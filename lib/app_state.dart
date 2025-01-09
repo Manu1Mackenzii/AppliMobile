@@ -1,41 +1,64 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:freemusic/services/event_service.dart';
-import 'package:freemusic/services/category_service.dart';
+import '../services/event_service.dart';
+import '../services/category_service.dart';
+import '../models/event.dart';
+import '../models/category.dart';
 
-import 'models/event.dart';
 class AppState extends ChangeNotifier {
-
   int selectedCategoryId = 0; // Catégorie sélectionnée
   List<Category> categories = [];
   List<Event> events = [];
+  bool isLoadingCategories = true;
+  bool isLoadingEvents = true;
 
   AppState() {
     _loadCategories();
     _loadEvents();
   }
 
-  // Mise à jour de l'ID de la catégorie sélectionnée
   void updateCategoryId(int selectedCategoryId) {
-    this.selectedCategoryId = selectedCategoryId;
-    notifyListeners();
+    if (categories.any((category) => category.categoryId == selectedCategoryId)) {
+      this.selectedCategoryId = selectedCategoryId;
+      notifyListeners();
+    } else {
+      print('ID de catégorie non valide : $selectedCategoryId');
+    }
   }
 
-  // Charger les catégories depuis le service
   Future<void> _loadCategories() async {
-    categories = (await CategoryService().fetchCategories()).cast<Category>();
-    notifyListeners(); // Met à jour les widgets qui écoutent ce changement
+    isLoadingCategories = true;
+    notifyListeners();
+    try {
+      final data = await CategoryService().fetchCategories();
+      categories = data.cast<Category>();
+    } catch (e) {
+      print('Erreur lors du chargement des catégories: $e');
+    } finally {
+      isLoadingCategories = false;
+      notifyListeners();
+    }
   }
 
-  // Charger les événements depuis le service
   Future<void> _loadEvents() async {
-    events = (await EventService().fetchEvents()).cast<Event>();
-    notifyListeners(); // Met à jour les widgets qui écoutent ce changement
+    isLoadingEvents = true;
+    notifyListeners();
+    try {
+      final data = await EventService().fetchEvents();
+      events = data.map((eventJson) => Event.fromJson(eventJson)).toList();
+    } catch (e) {
+      print('Erreur lors du chargement des événements: $e');
+    } finally {
+      isLoadingEvents = false;
+      notifyListeners();
+    }
   }
 
-  // Récupérer les événements filtrés par catégorie
   List<Event> get filteredEvents {
+    if (selectedCategoryId == 0) {
+      return events;
+    }
     return events.where((event) => event.categoryIds.contains(selectedCategoryId)).toList();
   }
-}
 
+  bool get isLoading => isLoadingCategories || isLoadingEvents;
+}

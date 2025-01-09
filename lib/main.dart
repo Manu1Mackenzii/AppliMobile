@@ -1,13 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:freemusic/entry/entry_point.dart';
 import 'package:freemusic/pages/login_page.dart';
 import 'package:freemusic/pages/signup_page.dart';
 import 'package:freemusic/services/auth.service.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart'; // Import easy_localization
+import 'package:freemusic/ui/event_details/event_details_page.dart';
 import 'package:freemusic/ui/homepage/home_page.dart';
 import '../pages/welcome.dart';
+import 'app_state.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,8 +64,11 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/login': (context) => const LoginPage(categories: [], events: []),
         '/signup': (context) => const SignupPage(),
-        '/home': (context) =>  HomePage( categories: [], events: []),
-      },
+        '/home': (context) => ChangeNotifierProvider(
+          create: (_) => AppState(),
+          child:  HomePage(),
+        ),
+          },
     );
   }
 }

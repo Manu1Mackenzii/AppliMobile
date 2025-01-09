@@ -9,9 +9,7 @@ import '../../styleguide.dart';
 class CategoryWidget extends StatelessWidget {
   final Category category;
 
-  const CategoryWidget({
-    required Key key,
-    required this.category}) : super(key: key);
+  const CategoryWidget({ required Key key, required this.category}): super(key: key);
 
 
 
@@ -28,8 +26,8 @@ class CategoryWidget extends StatelessWidget {
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
-        width: 90,
-        height: 90,
+        width: 120,
+        height: 120,
         decoration: BoxDecoration(
           border: Border.all(color: isSelected ? Colors.white : Color(0x99FFFFFF), width: 3),
           borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -39,9 +37,9 @@ class CategoryWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(
-              category.icon,
-              color: isSelected ? Theme.of(context).primaryColor : Colors.white,
-              size: 40,
+              category.getIconData(),
+              color: isSelected ? Theme.of(context).primaryColor : Colors.yellow,
+              size: 30,
             ),
             SizedBox(height: 10,),
             Text(

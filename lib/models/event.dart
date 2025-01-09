@@ -1,6 +1,7 @@
 class Event {
   final int eventId;
-  final String imagePath, title, description, location, duration, punchLine1, punchLine2;
+  final String imagePath, title, description, location, duration, punchLine1,
+      punchLine2;
   final List<int> categoryIds;
   final List<String> galleryImages;
 
@@ -17,6 +18,7 @@ class Event {
     required this.galleryImages,
   });
 
+
   // Crée un objet Event à partir d'une carte (données de la DB)
   factory Event.fromMap(Map<String, dynamic> map) {
     return Event(
@@ -28,7 +30,9 @@ class Event {
       duration: map['duration'],
       punchLine1: map['punch_line_1'],
       punchLine2: map['punch_line_2'],
-      categoryIds: (map['category_ids'] as String).split(',').map(int.parse).toList(),
+      categoryIds: (map['category_ids'] as String).split(',')
+          .map(int.parse)
+          .toList(),
       galleryImages: (map['gallery_images'] as String).split(','),
     );
   }
@@ -44,10 +48,37 @@ class Event {
       'duration': duration,
       'punch_line_1': punchLine1,
       'punch_line_2': punchLine2,
-      'category_ids': categoryIds.join(','), // Stockage en tant que chaîne CSV
-      'gallery_images': galleryImages.join(','), // Stockage en tant que chaîne CSV
+      'category_ids': categoryIds.join(','),
+      // Stockage en tant que chaîne CSV
+      'gallery_images': galleryImages.join(','),
+      // Stockage en tant que chaîne CSV
     };
   }
 
-  static fromJson(json) {}
+  // Méthode pour convertir un objet Event en JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'eventId': eventId,
+      'title': title,
+      'categoryIds': categoryIds,
+    };
+  }
+
+
+  factory Event.fromJson(Map<String, dynamic> json) {
+
+    return Event(
+      eventId: json['eventId'],
+      imagePath: json['imagePath'],
+      title: json['title'],
+      description: json['description'],
+      location: json['location'],
+      duration: json['duration'],
+      punchLine1: json['punchLine1'],
+      punchLine2: json['punchLine2'],
+      categoryIds: List<int>.from(json['categoryIds']),
+      galleryImages: List<String>.from(json['galleryImages']),
+    );
+  }
+
 }

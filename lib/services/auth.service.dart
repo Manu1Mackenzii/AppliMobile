@@ -59,8 +59,8 @@ class AuthService {
   Future<void> register(String username, String email, String password) async {
     try {
       final response = await _dio.post(
-       // 'http://127.0.0.1:3003/api/register',
-        'http://127.0.0.1:3003/api/login',
+        'http://127.0.0.1:3003/api/register',
+       // 'http://127.0.0.1:3003/api/login',
         data: {
           'username': username,
           'email': email,

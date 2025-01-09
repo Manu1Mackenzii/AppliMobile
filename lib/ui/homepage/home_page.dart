@@ -11,16 +11,6 @@ import '../../models/category.dart';
 
 class HomePage extends StatelessWidget {
 
-  final List<Category> categories;
-  final List<Event> events;
-
-
-  HomePage({
-  required this.categories,
-  required this.events,
-  });
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +22,6 @@ class HomePage extends StatelessWidget {
               key: Key('HomePageBackground'),
               screenHeight: MediaQuery.of(context).size.height,
             ),
-
             SafeArea(
               child: SingleChildScrollView(
                 child: Column(
@@ -65,13 +54,18 @@ class HomePage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 24.0),
                       child: Consumer<AppState>(
-                        builder: (context, appState, _) => SingleChildScrollView(
+                        builder: (context, appState, _) => appState.isLoadingCategories
+                            ? CircularProgressIndicator()
+                            : SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                            children: <Widget>[for (final category in categories) CategoryWidget(
-                              key: Key('Category_${category.categoryId}'),
-                              category: category,
-                            )],
+                            children: <Widget>[
+                              for (final category in appState.categories)
+                                CategoryWidget(
+                                  key: Key('Category_${category.categoryId}'),
+                                  category: category,
+                                )
+                            ],
                           ),
                         ),
                       ),
@@ -79,22 +73,24 @@ class HomePage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Consumer<AppState>(
-                        builder: (context, appState, _) => Column(
+                        builder: (context, appState, _) => appState.isLoadingEvents
+                            ? CircularProgressIndicator()
+                            : Column(
                           children: <Widget>[
-                            for (final event in events.where((e) => e.categoryIds.contains(appState.selectedCategoryId)))
+                            for (final event in appState.filteredEvents)
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => EventDetailsPage(
-                                        key: Key('EventDetails_${event.eventId}'), // Ajout du paramètre 'key'
+                                        key: Key('EventDetails_${event.eventId}'),
                                         event: event,
                                       ),
                                     ),
                                   );
                                 },
                                 child: EventWidget(
-                                  key: Key('Event_${event.eventId}'), // Ajout du paramètre 'key'
+                                  key: Key('Event_${event.eventId}'),
                                   event: event,
                                 ),
                               )

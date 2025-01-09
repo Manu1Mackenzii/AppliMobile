@@ -7,9 +7,7 @@ import '../../styleguide.dart';
 class EventWidget extends StatelessWidget {
   final Event event;
 
-  const EventWidget({
-    required Key key,
-    required this.event}) : super(key: key);
+  const EventWidget({ required Key key, required this.event}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

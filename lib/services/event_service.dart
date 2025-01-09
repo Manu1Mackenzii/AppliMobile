@@ -25,7 +25,7 @@ class EventService {
     try {
       final accessToken = await _authService.getToken();
       final response = await _dio.get(
-        '$apiUrl/matches',
+        'http://127.0.0.1:3003/api/events',
         options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
 
@@ -33,12 +33,13 @@ class EventService {
         List<dynamic> data = response.data;
         return List<Map<String, dynamic>>.from(data);
       } else {
-        throw Exception(
-            'Échec de la récupération des matches: ${response.data}');
+        print('Erreur: ${response.statusCode}, ${response.data}');
+        throw Exception('Échec de la récupération des événements');
       }
     } catch (e) {
-      print('Erreur lors de la récupération des matches: $e');
-      throw Exception('Échec de la récupération des matches');
+      print('Erreur lors de la récupération des événements: $e');
+      throw Exception('Échec de la récupération des événements');
     }
   }
+
 }

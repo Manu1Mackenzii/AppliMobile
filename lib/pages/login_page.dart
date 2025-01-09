@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(categories: widget.categories, events: widget.events),
+                    builder: (context) => HomePage(),
                   ),
                 );
                 ToastComponent.showToast(context, "login_success".tr(), ToastificationType.success);
